@@ -11,6 +11,10 @@ integer SUCCESS_ROOM = 298;
 integer SUCCESS_ADD = 297;
 integer SUCCESS_DELETE = 296;
 
+string PRODUCTION_URL = "http://162.243.199.109:3001";
+string DEVELOPMENT_URL = "http://192.241.153.101:3001";
+string baseUrl = DEVELOPMENT_URL;
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // HTTP Handlers
@@ -19,7 +23,7 @@ integer SUCCESS_DELETE = 296;
 
 addOccupant(string roomNumber, string agent)
 {
-	string URL = "http://162.243.199.109:3001/api/room";
+	string url = baseUrl + "/api/room";
 	list HTTP_PARAMS = [
 		HTTP_METHOD, "POST",
 		HTTP_MIMETYPE, "application/x-www-form-urlencoded;charset=utf-8",
@@ -27,37 +31,39 @@ addOccupant(string roomNumber, string agent)
 			];
 	string body = "number=" + llEscapeURL(roomNumber) + "&agent=" + llEscapeURL(agent);
 
-	llHTTPRequest(URL, HTTP_PARAMS, body);
+	llHTTPRequest(url, HTTP_PARAMS, body);
 }
 
 getFullOccupancyList()
 {
-	string URL = "http://162.243.199.109:3001/api/room";
+	string url = baseUrl + "/api/room";
 	list HTTP_PARAMS = [
 		HTTP_METHOD, "GET",
 		HTTP_MIMETYPE, "application/x-www-form-urlencoded;charset=utf-8",
 		HTTP_BODY_MAXLENGTH, 16384
 			];
-	llHTTPRequest(URL, [], "");
+
+	llHTTPRequest(url, [], "");
 }
 
 getRoomOccupancy(string roomNumber)
 {
-	string URL = "http://162.243.199.109:3001/api/room/" + roomNumber;
+	string url = baseUrl + "/api/room/" + roomNumber;
 	list HTTP_PARAMS = [
 		HTTP_METHOD, "GET",
 		HTTP_MIMETYPE, "application/x-www-form-urlencoded;charset=utf-8",
 		HTTP_BODY_MAXLENGTH, 16384
 			];
-	llHTTPRequest(URL, [], "");
+
+	llHTTPRequest(url, [], "");
 }
 
 removeOccupant(string roomNumber, string agent)
 {
-	string URL = "http://162.243.199.109:3001/api/room/" + llEscapeURL(roomNumber) + "/" + llEscapeURL(agent);
+	string url = baseUrl + "/api/room/" + llEscapeURL(roomNumber) + "/" + llEscapeURL(agent);
 	list HTTP_PARAMS = [HTTP_METHOD, "DELETE"];
 
-	llHTTPRequest(URL, HTTP_PARAMS, "");
+	llHTTPRequest(url, HTTP_PARAMS, "");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
