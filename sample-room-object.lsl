@@ -5,8 +5,8 @@ string COMMAND_LIST_ROOM = "room";
 string COMMAND_ADD = "add";
 string COMMAND_DELETE = "remove";
 
-vector textColor = <0.5, 0, 0>;
-float textAlpha = 0.7;
+vector textColor = <0.7, 0.7, 0.7>;
+float textAlpha = 0.5;
 
 integer dialogChannel; // This MUST be different for each room.
 
@@ -27,28 +27,43 @@ parseBody(string body)
 {
 	if(body == "") return;
 
-	// This function displays the occupant information. 
+	// This function displays the occupant information.
 
 	// Header
-	string result = "\nRoom " + getRoomNumber() + "\n";
+	string room;
+	string result = "";
+	string names = result;
 
 	// Get the list of user names and dates that the server sent.
+	// Index 0 = agent UUID
+	// Index 1 = agent username
+	// Index 2 = agent display name
+	// Index 3 = room name
+	// Index 4 = date last seen
 	list lines = llParseStringKeepNulls(body, ["\n"], []);
 	integer count= llGetListLength(lines);
 	while(--count >= 0)
 	{
 		string line = llList2String(lines, count);
 		list parts = llParseStringKeepNulls(line, [";"], []);
-		if(llGetListLength(parts) == 5)
+		if(llGetListLength(parts) == 5) {
+			if(room == "") room = llList2String(parts, 3);
+			names += llList2String(parts, 2) + "\n";
 			result += llList2String(parts, 2) + " " + llList2String(parts, 4) + "\n";
+		}
 	}
 
-	// Publish the information.
-	// This can be any method you wish. 
+
+	result = room + "\n" + result;
+	names = room + "\n" + names;
 	
+
+	// Publish the information.
+	// This can be any method you wish.
+
 	llWhisper(PUBLIC_CHANNEL, result);
 	// If you want to display on the object, this is a simple possibility.
-	// llSetText(result, textColor, textAlpha);
+	llSetText(names, textColor, textAlpha);
 }
 
 showDialog(key whoTouched)
