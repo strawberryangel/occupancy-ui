@@ -13,7 +13,15 @@ integer SUCCESS_DELETE = 296;
 
 string PRODUCTION_URL = "http://162.243.199.109:3001";
 string DEVELOPMENT_URL = "http://192.241.153.101:3001";
-string baseUrl = DEVELOPMENT_URL;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Configuration Options
+//
+///////////////////////////////////////////////////////////////////////////////
+
+string baseUrl = PRODUCTION_URL;
+integer DEBUG = FALSE; // Set to true to include debugging information.
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -31,6 +39,7 @@ addOccupant(string roomNumber, string agent)
 			];
 	string body = "number=" + llEscapeURL(roomNumber) + "&agent=" + llEscapeURL(agent);
 
+	debug("Post " + url + " body:  " + body);
 	llHTTPRequest(url, HTTP_PARAMS, body);
 }
 
@@ -43,6 +52,7 @@ getFullOccupancyList()
 		HTTP_BODY_MAXLENGTH, 16384
 			];
 
+	debug("Get " + url);
 	llHTTPRequest(url, [], "");
 }
 
@@ -55,6 +65,7 @@ getRoomOccupancy(string roomNumber)
 		HTTP_BODY_MAXLENGTH, 16384
 			];
 
+	debug("Get " + url);
 	llHTTPRequest(url, [], "");
 }
 
@@ -62,13 +73,21 @@ removeOccupant(string roomNumber, string agent)
 {
 	string url = baseUrl + "/api/room/" + llEscapeURL(roomNumber) + "/" + llEscapeURL(agent);
 	list HTTP_PARAMS = [HTTP_METHOD, "DELETE"];
-
+	
+	debug("Delete " + url);
 	llHTTPRequest(url, HTTP_PARAMS, "");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Helper Functions
+//
 ///////////////////////////////////////////////////////////////////////////////
+
+debug(string message)
+{
+	if(DEBUG) llOwnerSay(message);
+}
 
 processMessage(string  message)
 {
