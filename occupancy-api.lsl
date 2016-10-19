@@ -58,7 +58,7 @@ getFullOccupancyList()
 
 getRoomOccupancy(string roomNumber)
 {
-	string url = baseUrl + "/api/room/" + roomNumber;
+	string url = baseUrl + "/api/room/" + llEscapeURL(roomNumber);
 	list HTTP_PARAMS = [
 		HTTP_METHOD, "GET",
 		HTTP_MIMETYPE, "application/x-www-form-urlencoded;charset=utf-8",
@@ -73,7 +73,7 @@ removeOccupant(string roomNumber, string agent)
 {
 	string url = baseUrl + "/api/room/" + llEscapeURL(roomNumber) + "/" + llEscapeURL(agent);
 	list HTTP_PARAMS = [HTTP_METHOD, "DELETE"];
-	
+
 	debug("Delete " + url);
 	llHTTPRequest(url, HTTP_PARAMS, "");
 }
